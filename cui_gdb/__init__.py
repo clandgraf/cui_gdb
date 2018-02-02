@@ -41,6 +41,7 @@ def gdb_clear_procs():
     for proc in cui.get_variable(['cui-gdb', 'processes']):
         proc.kill(wait=True)
 
+
 @cui.init_func
 def initialize():
     cui.add_exit_handler(gdb_clear_procs)

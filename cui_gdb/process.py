@@ -1,7 +1,7 @@
 import cui
 import os
 
-from cui.tools import processes
+from cui_tools import processes
 
 from .parser import parse_record, parse_value, RES_CLS_DONE
 
@@ -54,7 +54,8 @@ class GdbProcess(processes.LineBufferedProcess):
         super(GdbProcess, self).__init__(
             cui.get_variable(['cui-gdb', 'gdb-proc']),
             '--interpreter=mi',
-            name
+            name,
+            env=cui
         )
         self._name = name
         self._command_queue = []
@@ -112,7 +113,7 @@ class GdbProcess(processes.LineBufferedProcess):
     def db_break_insert(self, fn):
         self.send_command('break-insert', fn)
 
-    def stop(self):
+    def term(self):
         self.send_command('gdb-exit')
 
     def __repr__(self):

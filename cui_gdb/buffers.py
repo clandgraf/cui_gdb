@@ -4,6 +4,7 @@
 
 import cui
 
+from cui_source.buffers import FileBuffer
 from .process import GdbProcess
 
 
@@ -13,6 +14,9 @@ class _FileHandler(cui.buffers.NodeHandler(is_expanded_=True)):
 
     def render(self, window, item, depth, width):
         return [item[0]]
+
+    def open(self, item):
+        cui.buffer_visible(FileBuffer, item[1]['fullname'])
 
 
 class _DirectoryHandler(cui.buffers.NodeHandler(is_expanded_=True, has_children_=True)):
@@ -39,6 +43,10 @@ class _ProcessHandler(cui.buffers.NodeHandler(is_expanded_=True, has_children_=T
 
 @cui.buffers.node_handlers(_ProcessHandler, _DirectoryHandler, _FileHandler)
 class ProcessBuffer(cui.buffers.DefaultTreeBuffer):
+    __keymap__ = {
+        '<enter>': cui.buffers.invoke_node_handler('open')
+    }
+
     @classmethod
     def name(cls, **kwargs):
         return "gdb Processes"
